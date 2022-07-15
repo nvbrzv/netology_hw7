@@ -93,7 +93,7 @@ def task_about_sorting():
         if file_path is None:
             return 'Something wrong with one of files!'
         with open(file_path) as text:
-            # The task not describes how to handle with empty lines (if they there are),
+            # The task not describes how to handle with empty lines (if they there are) and extra spaces in text,
             # so I decided to keep them.
             files_dict[file] = text.read().split('\n')
     result_path = make_path('task3', 'result.txt', False)
