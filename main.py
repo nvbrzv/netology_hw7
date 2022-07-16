@@ -3,6 +3,20 @@
 import os
 
 
+class Dish:
+    def __init__(self, name):
+        self.name = name
+        self.ingredients = {}
+
+
+class Ingredient:
+    def __init__(self, ingredient_name='', quantity=0, measure=''):
+        self.ingredient_name = ingredient_name
+        self.quantity = int(quantity)
+        self.measure = measure
+
+
+
 # Function to unify path making in this module.
 def make_path(target_task_dir, target_file=None, check_existence=True):
     root_path = os.getcwd()
@@ -27,31 +41,26 @@ def make_cook_book_from_file():
     # Represents Task 1.
     cook_book = {}
 
-    # Inner function to
-    def preparing_line(line):
-        line = line.strip()
-        if '|' in line:
-            dict_ = dict()
-            dict_['ingredient_name'], dict_['quantity'], dict_['measure'] = line.split(' | ')
-            return dict_
-        return line
-
     recipes_path = make_path('task1', 'recipes.txt')
     if recipes_path is None:
         return None
 
     with open(recipes_path) as file:
-        recipes_raw = list(map(preparing_line, file.readlines()))
+        recipes_raw = list(map(str.strip, file.readlines()))
     dish_name_temp = ''
     for e in recipes_raw:
         if isinstance(e, str) and e.isnumeric() or e == '':
             continue
+        elif '|' in e:
+            ing = Ingredient()
+            ing.ingredient_name, ing.quantity, ing.measure = e.split(' | ')
+            cook_book[dish_name_temp].ingredients[ing.ingredient_name] = ing
         elif isinstance(e, str):
-            cook_book[e] = []
+            cook_book[e] = Dish(e)
             dish_name_temp = e
         else:
-            cook_book[dish_name_temp].append(e)
-    return cook_book
+            continue
+    return cook_book['Запеченный картофель'].ingredients['Картофель']
 
 
 def get_shop_list_by_dishes(dishes, person_count):
@@ -75,47 +84,47 @@ def get_shop_list_by_dishes(dishes, person_count):
     else:
         return None
 
+#
+# def task_about_sorting():
+#     # Represent Task 3.
+#     dir_path = make_path('task3')
+#     if dir_path is None:
+#         return None
+#     files = [
+#         file for file in os.listdir(dir_path)
+#         if file.endswith('.txt') and not file.startswith('result')
+#     ]
+#     files_dict = {}
 
-def task_about_sorting():
-    # Represent Task 3.
-    dir_path = make_path('task3')
-    if dir_path is None:
-        return None
-    files = [
-        file for file in os.listdir(dir_path)
-        if file.endswith('.txt') and not file.startswith('result')
-    ]
-    files_dict = {}
-
-    for file in files:
-        # Re-check if file still exists.
-        file_path = make_path('task3', file)
-        if file_path is None:
-            return 'Something wrong with one of files!'
-        with open(file_path) as text:
-            # The task not describes how to handle with empty lines (if they there are) and extra spaces in text,
-            # so I decided to keep them.
-            files_dict[file] = text.read().split('\n')
-    result_path = make_path('task3', 'result.txt', False)
-    sorted_files_text = sorted(files_dict.items(), key=lambda x: len(x[1]))
-    result_text_list = []
-
-    for file in sorted_files_text:
-        result_text_list += file[0], str(len(file[1])), *file[1]
-    result_text = '\n'.join(result_text_list)
-
-    with open(result_path, 'w') as result_file:
-        result_file.write(result_text)
-    return f'Check this for result: {result_path}'
-
+    # for file in files:
+    #     # Re-check if file still exists.
+    #     file_path = make_path('task3', file)
+    #     if file_path is None:
+    #         return 'Something wrong with one of files!'
+    #     with open(file_path) as text:
+    #         # The task not describes how to handle with empty lines (if they there are) and extra spaces in text,
+    #         # so I decided to keep them.
+    #         files_dict[file] = text.read().split('\n')
+    # result_path = make_path('task3', 'result.txt', False)
+    # sorted_files_text = sorted(files_dict.items(), key=lambda x: len(x[1]))
+    # result_text_list = []
+    #
+    # for file in sorted_files_text:
+    #     result_text_list += file[0], str(len(file[1])), *file[1]
+    # result_text = '\n'.join(result_text_list)
+    #
+    # with open(result_path, 'w') as result_file:
+    #     result_file.write(result_text)
+    # return f'Check this for result: {result_path}'
+    #
 
 def main():
     print('Task 1. Making cook book:')
     print(make_cook_book_from_file())
     print('Task 2. Making shop list:')
     print(get_shop_list_by_dishes(['Запеченный картофель', 'Омлет', 'Блюдо которого нет в списке'], 2))
-    print('Task 3. Making sort:')
-    print(task_about_sorting())
+    # print('Task 3. Making sort:')
+    # print(task_about_sorting())
 
 
 main()
