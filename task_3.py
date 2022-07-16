@@ -8,7 +8,10 @@ class Text:
         # The task not describes how to handle with
         # empty lines (if they there are) and extra spaces in text,
         # so I decided to keep them.
-        self.num_of_lines = self.content.count('\n') + 1
+        if len(self.content) == 0:
+            self.num_of_lines = 0
+        else:
+            self.num_of_lines = self.content.count('\n') + 1
 
     def __lt__(self, other):
         if isinstance(other, Text):

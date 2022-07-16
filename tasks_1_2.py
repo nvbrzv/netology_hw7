@@ -28,7 +28,7 @@ class CookBook:
 
     def return_dict(self):
         if not self.content:
-            return 'Empty'
+            return {}
         common_dict = {}
         for key in self.content.keys():
             common_dict[key] = []
@@ -47,7 +47,7 @@ class ShopList:
 
     def return_dict(self):
         if not self.content:
-            return 'Empty'
+            return {}
         common_dict = {}
         for key, value in self.content.items():
             common_dict[key] = {'measure': value.measure, 'quantity': value.quantity}
