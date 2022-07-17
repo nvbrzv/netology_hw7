@@ -83,11 +83,9 @@ def make_cook_book_from_file(recipes_path):
             temp_ingr.ingredient_name, temp_ingr.quantity, temp_ingr.measure = line.split(' | ')
             temp_ingr.quantity = int(temp_ingr.quantity)
             cook_book[dish_name_temp].ingredients[temp_ingr.ingredient_name] = temp_ingr
-        elif isinstance(line, str):
+        else:
             cook_book[line] = Dish(line)
             dish_name_temp = line
-        else:
-            continue
     return cook_book
 
 
@@ -114,11 +112,9 @@ def main():
     print('Task 1. Making cook book:')
     cook_book = CookBook('task1', 'recipes.txt')
     print({**cook_book.return_dict()})
-    print(cook_book)
     print('Task 2. Making shop list:')
     shop_list = ShopList(cook_book, ['Омлет', 'Фахитос', 'Запеченный картофель', 'Блюдо которого нет в списке'], 2)
     print({**shop_list.return_dict()})
-    print(shop_list)
 
 
 main()
